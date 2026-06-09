@@ -134,3 +134,43 @@ footer{border-top:1px solid var(--line);padding:46px 0;color:var(--muted);font-s
 .pay-note{font-size:12px;color:var(--muted);text-align:center;margin-top:6px}
 .wa{background:#25D366;color:#fff}
 .wa:hover{background:#1da851}
+
+/* HERO ENTRANCE (mejora puntual) */
+@keyframes riseIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.hero-in > *{animation:riseIn .7s cubic-bezier(.2,.7,.2,1) both}
+.hero-in .eyebrow{animation-delay:.04s}
+.hero-in h1{animation-delay:.12s}
+.hero-in .sub{animation-delay:.2s}
+.hero-in .price{animation-delay:.28s}
+.hero-in .ctas{animation-delay:.34s}
+.product-art{animation:float 6s ease-in-out 1s infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@media (prefers-reduced-motion: reduce){.hero-in > *,.product-art,.halo{animation:none}}
+
+/* REVIEWS (bento: una destacada + dos secundarias) */
+.reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.review{background:#fff;border:1px solid var(--line);border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:16px}
+.review.feature{background:var(--ink);color:#fff;border-color:var(--ink)}
+.stars{font-family:var(--mono);color:var(--accent);letter-spacing:3px;font-size:14px}
+.review.feature .stars{color:#8c97ff}
+.review p{font-size:16px;line-height:1.55;flex:1}
+.review.feature p{font-size:18px;font-family:var(--display);font-weight:700;letter-spacing:-.01em;line-height:1.3}
+.review .who{display:flex;align-items:center;gap:12px}
+.review .avatar{width:42px;height:42px;border-radius:50%;background:var(--bg-soft);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:16px;color:var(--accent-ink);flex-shrink:0}
+.review.feature .avatar{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.22);color:#fff}
+.review .who b{font-family:var(--display);font-size:15px;display:block;line-height:1.1}
+.review .who span{font-size:13px;color:var(--muted)}
+.review.feature .who span{color:rgba(255,255,255,.6)}
+@media(max-width:760px){.reviews{grid-template-columns:1fr}}
+
+/* STICKY BUY BAR */
+.buybar{position:fixed;left:0;right:0;bottom:0;z-index:80;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(20px);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .35s cubic-bezier(.4,0,.2,1)}
+.buybar.show{transform:translateY(0)}
+.buybar-in{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 24px;max-width:var(--max);margin:0 auto}
+.bb-info{display:flex;align-items:center;gap:13px;min-width:0}
+.bb-thumb{width:38px;height:38px;border-radius:10px;background:var(--bg-soft);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.bb-txt b{font-family:var(--display);font-size:15px;display:block;line-height:1.15}
+.bb-txt span{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.bb-txt span s{margin-right:6px}
+.buybar .btn{flex-shrink:0}
+@media(max-width:560px){.buybar-in{padding:11px 16px}.bb-txt b{font-size:13px}.bb-txt span{font-size:12px}.buybar .btn{padding:11px 18px;font-size:14px}}

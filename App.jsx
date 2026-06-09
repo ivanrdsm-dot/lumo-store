@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { CONFIG } from "./config.js"
 import { logOrder } from "./firebase.js"
 
@@ -8,6 +8,13 @@ export default function App() {
   const [cart, setCart] = useState(0)
   const [open, setOpen] = useState(false)
   const [faq, setFaq] = useState(null)
+  const [showBar, setShowBar] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setShowBar(window.scrollY > 640)
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
 
   const add = () => { setCart((c) => c + 1); setOpen(true) }
   const total = cart * CONFIG.PRECIO
@@ -39,6 +46,11 @@ export default function App() {
     ["Gatos recomendados", "hasta 4"], ["Conectividad", "WiFi 2.4 GHz · App iOS/Android"],
     ["Sensores de seguridad", "peso + infrarrojo"], ["Control de olor", "UV + desodorizante"],
     ["Energía", "110V · 24W"], ["Certificaciones", "CE · FCC · RoHS"],
+  ]
+  const reviews = [
+    ["Llevábamos años peleando con el olor en el depa. Desde Lumo, nada. En serio, nada. Mi único trabajo ahora es vaciar el cajón el domingo.", "Mariana R.", "CDMX · 2 gatos", true],
+    ["Viajo por trabajo y la app me deja ver que mi gata usa el arenero normal aunque yo no esté. Esa tranquilidad no tiene precio.", "Diego A.", "Monterrey", false],
+    ["El soporte me contestó por WhatsApp el mismo día. Eso me convenció de comprarlo en México y no importarlo.", "Paola V.", "Guadalajara", false],
   ]
   const faqs = [
     ["¿Sirve con cualquier arena?", "Funciona con arena aglutinante de bentonita o de tofu. Trae dos cribas intercambiables incluidas."],
@@ -159,6 +171,24 @@ export default function App() {
         </div>
       </section>
 
+      <section className="block" id="reviews">
+        <div className="wrap">
+          <div className="section-head"><span className="eyebrow">Reseñas</span><h2>Pet parents que ya no tocan la pala.</h2></div>
+          <div className="reviews">
+            {reviews.map(([t, n, c, feat]) => (
+              <div className={"review" + (feat ? " feature" : "")} key={n}>
+                <div className="stars">★★★★★</div>
+                <p>{t}</p>
+                <div className="who">
+                  <div className="avatar">{n[0]}</div>
+                  <div><b>{n}</b><span>{c}</span></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="block">
         <div className="wrap">
           <div className="buy">
@@ -191,6 +221,19 @@ export default function App() {
           <span>© 2026 Lumo · Hecho en México con tecnología global · hola@lumo.mx</span>
         </div>
       </footer>
+
+      <div className={"buybar" + (showBar && !open ? " show" : "")}>
+        <div className="buybar-in">
+          <div className="bb-info">
+            <div className="bb-thumb">🐈</div>
+            <div className="bb-txt">
+              <b>Lumo · Arenero inteligente</b>
+              <span><s>$7,490</s>{fmt(CONFIG.PRECIO)} · 12 MSI</span>
+            </div>
+          </div>
+          <button className="btn btn-primary" onClick={add}>Agregar al carrito</button>
+        </div>
+      </div>
 
       <div className={"overlay" + (open ? " show" : "")} onClick={() => setOpen(false)} />
       <aside className={"drawer" + (open ? " show" : "")} aria-label="Carrito">
