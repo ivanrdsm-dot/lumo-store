@@ -11,8 +11,26 @@ function Shot({ src, alt, className }) {
   return <img className={className} src={src} alt={alt} loading="lazy" onError={() => setOk(false)} />
 }
 
+// Catálogo Lumo (modelos reales del fabricante Petrust/Chongxin · Tikpaws)
+const PRODUCTS = [
+  { id: "arenero",     nombre: "Lumo",                 sub: "Arenero inteligente · 72L · app + UV",      modelo: "CB001",     precio: 4490, antes: 5990, icon: "🐈", img: "/producto-hero.png",      badge: "Más vendido" },
+  { id: "arenero-cam", nombre: "Lumo Cam",             sub: "Arenero con cámara 1080P + pantalla LCD",   modelo: "CB004",     precio: 5990, antes: 7490, icon: "📷", img: "/producto-cam.png" },
+  { id: "fuente",      nombre: "Lumo Fuente",          sub: "Bebedero de acero · app + esterilización",  modelo: "TK-WF117L", precio: 1190, icon: "💧", img: "/producto-fuente.png" },
+  { id: "comedero",    nombre: "Lumo Comedero",        sub: "Comedero con cámara 1080P · app de salud",  modelo: "CC001",     precio: 1790, icon: "🍽️", img: "/producto-comedero.png" },
+  { id: "tapete",      nombre: "Tapete atrapa-arena",  sub: "Mantén el piso impecable",                  modelo: "TK-Mat",    precio: 349,  icon: "▦",  img: "/producto-tapete.png" },
+  { id: "bolsas",      nombre: "Bolsas de repuesto",   sub: "5 rollos · compatibles con Lumo",           modelo: "TK-Bags",   precio: 199,  icon: "🛍️", img: "/producto-bolsas.png" },
+  { id: "olor",        nombre: "Eliminador de olor",   sub: "Refill · 98% anti-amoniaco",                modelo: "TK-Odor",   precio: 249,  icon: "🌿", img: "/producto-olor.png" },
+]
+
+// Imagen de producto: usa la foto si existe, si no muestra un ícono limpio.
+function ProductImg({ p }) {
+  const [ok, setOk] = useState(true)
+  if (ok && p.img) return <img src={p.img} alt={p.nombre} loading="lazy" onError={() => setOk(false)} />
+  return <div className="pcard-icon">{p.icon}</div>
+}
+
 export default function App() {
-  const [cart, setCart] = useState(0)
+  const [cart, setCart] = useState({})
   const [open, setOpen] = useState(false)
   const [faq, setFaq] = useState(null)
   const [showBar, setShowBar] = useState(false)
@@ -24,16 +42,27 @@ export default function App() {
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
-  const add = () => { setCart((c) => c + 1); setOpen(true) }
-  const total = cart * CONFIG.PRECIO
+  const add = (id = "arenero") => { setCart((c) => ({ ...c, [id]: (c[id] || 0) + 1 })); setOpen(true) }
+  const inc = (id) => setCart((c) => ({ ...c, [id]: (c[id] || 0) + 1 }))
+  const dec = (id) => setCart((c) => {
+    const next = { ...c }
+    const q = (next[id] || 0) - 1
+    if (q <= 0) delete next[id]; else next[id] = q
+    return next
+  })
+  const prod = (id) => PRODUCTS.find((p) => p.id === id)
+  const items = Object.entries(cart)
+  const count = items.reduce((s, [, q]) => s + q, 0)
+  const total = items.reduce((s, [id, q]) => s + (prod(id)?.precio || 0) * q, 0)
 
   const checkoutWA = () => {
-    const msg = encodeURIComponent(`Hola Lumo 👋 Quiero pedir ${cart} arenero(s) Lumo · Total ${fmt(total)}`)
-    logOrder({ cantidad: cart, total, canal: "whatsapp" })
+    const lines = items.map(([id, q]) => `• ${q}x ${prod(id).nombre} — ${fmt(prod(id).precio * q)}`).join("\n")
+    logOrder({ items: cart, total, canal: "whatsapp" })
+    const msg = encodeURIComponent(`Hola Lumo 👋 Quiero pedir:\n${lines}\nTotal: ${fmt(total)}`)
     window.open(`https://wa.me/${CONFIG.WHATSAPP}?text=${msg}`, "_blank")
   }
   const checkout = () => {
-    logOrder({ cantidad: cart, total, canal: "mercadopago" })
+    logOrder({ items: cart, total, canal: "mercadopago" })
     if (CONFIG.MERCADO_PAGO_LINK) window.open(CONFIG.MERCADO_PAGO_LINK, "_blank")
     else checkoutWA()
   }
@@ -74,15 +103,15 @@ export default function App() {
           <a href="#top" className="brand"><span className="ring" />lumo</a>
           <div className="nav-links">
             <a href="#features">Tecnología</a>
-            <a href="#como">Cómo funciona</a>
+            <a href="#tienda">Tienda</a>
             <a href="#specs">Especificaciones</a>
             <a href="#faq">Preguntas</a>
           </div>
           <div className="nav-right">
             <button className="cart-btn" onClick={() => setOpen(true)} aria-label="Carrito">
-              🛒{cart > 0 && <span className="cart-count">{cart}</span>}
+              🛒{count > 0 && <span className="cart-count">{count}</span>}
             </button>
-            <button className="btn btn-primary" onClick={add}>Comprar</button>
+            <button className="btn btn-primary" onClick={() => add()}>Comprar</button>
           </div>
         </div>
       </nav>
@@ -95,7 +124,7 @@ export default function App() {
           <p className="sub">Lumo se limpia solo, controla el olor y cuida la salud de tu gato desde tu celular. Tú solo convives con él.</p>
           <p className="price"><s>$5,990</s> <b>$4,490 MXN</b> · 12 MSI</p>
           <div className="ctas">
-            <button className="btn btn-primary" onClick={add}>Comprar Lumo</button>
+            <button className="btn btn-primary" onClick={() => add()}>Comprar Lumo</button>
             <a href="#como" className="btn btn-ghost">Ver cómo funciona</a>
           </div>
           {heroImgOk && (
@@ -198,7 +227,35 @@ export default function App() {
         </div>
       </section>
 
-      <section className="block" id="reviews">
+      <section className="block" id="tienda">
+        <div className="wrap">
+          <div className="section-head">
+            <span className="eyebrow">La línea Lumo</span>
+            <h2>Todo para tu gato. Una sola marca.</h2>
+            <p>Del arenero que se limpia solo a la fuente, el comedero y los consumibles. Arma su setup completo.</p>
+          </div>
+          <div className="shop">
+            {PRODUCTS.map((p) => (
+              <div className="pcard" key={p.id}>
+                <div className="pcard-media">
+                  <ProductImg p={p} />
+                  {p.badge && <span className="pcard-badge">{p.badge}</span>}
+                </div>
+                <div className="pcard-body">
+                  <h3>{p.nombre}</h3>
+                  <p className="pcard-sub">{p.sub}</p>
+                  <div className="pcard-foot">
+                    <span className="pcard-price">{p.antes && <s>${p.antes.toLocaleString("es-MX")}</s>} {fmt(p.precio)}</span>
+                    <button className="btn btn-primary" onClick={() => add(p.id)}>Agregar</button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="block" id="reviews" style={{ background: "var(--bg-soft)" }}>
         <div className="wrap">
           <div className="section-head"><span className="eyebrow">Reseñas</span><h2>Pet parents que ya no tocan la pala.</h2></div>
           <div className="reviews">
@@ -223,7 +280,7 @@ export default function App() {
             <h2>Lumo</h2>
             <div className="price"><s>$5,990</s> $4,490 MXN</div>
             <small>12 meses sin intereses · Envío gratis · Garantía de 1 año</small>
-            <div><button className="btn btn-primary" onClick={add}>Agregar al carrito</button></div>
+            <div><button className="btn btn-primary" onClick={() => add()}>Agregar al carrito</button></div>
           </div>
         </div>
       </section>
@@ -258,27 +315,31 @@ export default function App() {
               <span><s>$5,990</s>{fmt(CONFIG.PRECIO)} · 12 MSI</span>
             </div>
           </div>
-          <button className="btn btn-primary" onClick={add}>Agregar al carrito</button>
+          <button className="btn btn-primary" onClick={() => add()}>Agregar al carrito</button>
         </div>
       </div>
 
       <div className={"overlay" + (open ? " show" : "")} onClick={() => setOpen(false)} />
       <aside className={"drawer" + (open ? " show" : "")} aria-label="Carrito">
         <div className="drawer-head"><h3>Tu carrito</h3><button className="x" onClick={() => setOpen(false)}>×</button></div>
-        {cart === 0 ? (
+        {items.length === 0 ? (
           <p className="empty">Tu carrito está vacío.</p>
         ) : (
           <>
-            <div className="line-item">
-              <div className="li-thumb">🐈</div>
-              <div className="li-info">
-                <h4>Lumo · Arenero inteligente</h4><span>{fmt(CONFIG.PRECIO)}</span>
-                <div className="qty">
-                  <button onClick={() => setCart((c) => Math.max(0, c - 1))}>−</button>
-                  <span>{cart}</span>
-                  <button onClick={() => setCart((c) => c + 1)}>+</button>
+            <div className="line-items">
+              {items.map(([id, q]) => (
+                <div className="line-item" key={id}>
+                  <div className="li-thumb">{prod(id).icon}</div>
+                  <div className="li-info">
+                    <h4>{prod(id).nombre}</h4><span>{fmt(prod(id).precio)}</span>
+                    <div className="qty">
+                      <button onClick={() => dec(id)}>−</button>
+                      <span>{q}</span>
+                      <button onClick={() => inc(id)}>+</button>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
             <div className="cart-total"><span>Total</span><span>{fmt(total)}</span></div>
             <button className="btn btn-primary" onClick={checkout}>Pagar con tarjeta · 12 MSI</button>
