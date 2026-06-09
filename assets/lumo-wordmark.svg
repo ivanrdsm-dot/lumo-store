@@ -1,0 +1,17 @@
+<svg width="420" height="160" viewBox="0 0 420 160" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Lumo">
+  <defs>
+    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#5B6CFF" stop-opacity="0.35"/>
+      <stop offset="60%" stop-color="#5B6CFF" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#5B6CFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <!-- soft light halo behind the o -->
+  <circle cx="330" cy="92" r="64" fill="url(#halo)"/>
+  <g fill="#1A1A1C" font-family="Manrope, sans-serif" font-weight="800">
+    <text x="20" y="112" font-size="120" letter-spacing="-6">lum</text>
+  </g>
+  <!-- the 'o' as a luminous ring = the light source -->
+  <circle cx="330" cy="92" r="34" fill="none" stroke="#1A1A1C" stroke-width="18"/>
+  <circle cx="330" cy="92" r="34" fill="none" stroke="#5B6CFF" stroke-width="18" stroke-dasharray="40 220" stroke-linecap="round" transform="rotate(-55 330 92)"/>
+</svg>

@@ -1,0 +1,13 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Lumo icon">
+  <defs>
+    <radialGradient id="ihalo" cx="50%" cy="42%" r="55%">
+      <stop offset="0%" stop-color="#5B6CFF" stop-opacity="0.55"/>
+      <stop offset="55%" stop-color="#5B6CFF" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#5B6CFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect x="0" y="0" width="200" height="200" rx="46" fill="#1A1A1C"/>
+  <circle cx="100" cy="92" r="70" fill="url(#ihalo)"/>
+  <circle cx="100" cy="95" r="40" fill="none" stroke="#FFFFFF" stroke-width="16"/>
+  <circle cx="100" cy="95" r="40" fill="none" stroke="#5B6CFF" stroke-width="16" stroke-dasharray="46 260" stroke-linecap="round" transform="rotate(-50 100 95)"/>
+</svg>
