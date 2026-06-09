@@ -93,7 +93,7 @@ export default function App() {
           <span className="eyebrow">Arenero inteligente · Hecho para tu gato</span>
           <h1>La limpieza, en automático.</h1>
           <p className="sub">Lumo se limpia solo, controla el olor y cuida la salud de tu gato desde tu celular. Tú solo convives con él.</p>
-          <p className="price"><s>$7,490</s> <b>$5,990 MXN</b> · 12 MSI</p>
+          <p className="price"><s>$5,990</s> <b>$4,490 MXN</b> · 12 MSI</p>
           <div className="ctas">
             <button className="btn btn-primary" onClick={add}>Comprar Lumo</button>
             <a href="#como" className="btn btn-ghost">Ver cómo funciona</a>
@@ -192,7 +192,7 @@ export default function App() {
               <tr><td>App de salud</td><td className="yes">✓</td><td className="lumo-col yes">✓</td><td className="yes">✓</td></tr>
               <tr><td>Control de olor UV</td><td>—</td><td className="lumo-col yes">✓</td><td className="yes">✓</td></tr>
               <tr><td>Garantía en México</td><td>limitada</td><td className="lumo-col yes">1 año local</td><td>limitada</td></tr>
-              <tr><td>Precio aprox.</td><td className="price-cell">$13,500</td><td className="lumo-col price-cell">$5,990</td><td className="price-cell">$7,500</td></tr>
+              <tr><td>Precio aprox.</td><td className="price-cell">$13,500</td><td className="lumo-col price-cell">$4,490</td><td className="price-cell">$10,490</td></tr>
             </tbody>
           </table>
         </div>
@@ -221,7 +221,7 @@ export default function App() {
           <div className="buy">
             <span className="eyebrow">Edición de lanzamiento</span>
             <h2>Lumo</h2>
-            <div className="price"><s>$7,490</s> $5,990 MXN</div>
+            <div className="price"><s>$5,990</s> $4,490 MXN</div>
             <small>12 meses sin intereses · Envío gratis · Garantía de 1 año</small>
             <div><button className="btn btn-primary" onClick={add}>Agregar al carrito</button></div>
           </div>
@@ -255,7 +255,7 @@ export default function App() {
             <div className="bb-thumb">🐈</div>
             <div className="bb-txt">
               <b>Lumo · Arenero inteligente</b>
-              <span><s>$7,490</s>{fmt(CONFIG.PRECIO)} · 12 MSI</span>
+              <span><s>$5,990</s>{fmt(CONFIG.PRECIO)} · 12 MSI</span>
             </div>
           </div>
           <button className="btn btn-primary" onClick={add}>Agregar al carrito</button>
