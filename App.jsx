@@ -4,11 +4,19 @@ import { logOrder } from "./firebase.js"
 
 const fmt = (n) => "$" + n.toLocaleString("es-MX") + " MXN"
 
+// Imagen que se oculta sola si el archivo aún no existe (no rompe el layout).
+function Shot({ src, alt, className }) {
+  const [ok, setOk] = useState(true)
+  if (!ok) return null
+  return <img className={className} src={src} alt={alt} loading="lazy" onError={() => setOk(false)} />
+}
+
 export default function App() {
   const [cart, setCart] = useState(0)
   const [open, setOpen] = useState(false)
   const [faq, setFaq] = useState(null)
   const [showBar, setShowBar] = useState(false)
+  const [heroImgOk, setHeroImgOk] = useState(true)
 
   useEffect(() => {
     const onScroll = () => setShowBar(window.scrollY > 640)
@@ -90,6 +98,10 @@ export default function App() {
             <button className="btn btn-primary" onClick={add}>Comprar Lumo</button>
             <a href="#como" className="btn btn-ghost">Ver cómo funciona</a>
           </div>
+          {heroImgOk && (
+            <img className="product-art" src="/producto-hero.png" alt="Arenero inteligente Lumo" onError={() => setHeroImgOk(false)} />
+          )}
+          {!heroImgOk && (
           <svg className="product-art" viewBox="0 0 360 320" xmlns="http://www.w3.org/2000/svg" aria-label="Arenero Lumo">
             <defs>
               <radialGradient id="pg" cx="50%" cy="40%" r="55%">
@@ -108,6 +120,7 @@ export default function App() {
             <rect x="150" y="92" width="60" height="16" rx="8" fill="#1A1A1C" />
             <circle cx="160" cy="100" r="3" fill="#5B6CFF" />
           </svg>
+          )}
         </div>
       </div>
 
@@ -135,12 +148,26 @@ export default function App() {
         </div>
       </section>
 
+      <section className="block" style={{ paddingTop: 0 }}>
+        <div className="wrap">
+          <div className="showcase">
+            <div className="cap">
+              <span className="eyebrow">La app</span>
+              <h2>La salud de tu gato, en tu bolsillo.</h2>
+              <p>Peso, visitas y patrones de cada día. Lumo te avisa cuando algo cambia, antes de que se vuelva un problema.</p>
+            </div>
+            <Shot src="/producto-app.png" alt="App de salud de Lumo en un celular junto al arenero" />
+          </div>
+        </div>
+      </section>
+
       <section className="block" id="como" style={{ background: "var(--bg-soft)" }}>
         <div className="wrap">
           <div className="section-head"><span className="eyebrow">Cómo funciona</span><h2>Listo en tres pasos.</h2></div>
           <div className="steps">
             {steps.map(([t, d]) => (<div className="step" key={t}><h3>{t}</h3><p>{d}</p></div>))}
           </div>
+          <Shot className="shot-life" src="/producto-lifestyle.png" alt="Arenero Lumo en una sala minimalista con un gato" />
         </div>
       </section>
 
